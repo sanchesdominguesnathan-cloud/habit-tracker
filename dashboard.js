@@ -1,46 +1,98 @@
-function atualizarGrafico() {
+const checkboxes = document.querySelectorAll("input[type='checkbox']")
 
-    const dias = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sab", "Dom"];
-    const desempenho = [];
+checkboxes.forEach((box,index)=>{
 
-    const linhas = document.querySelectorAll("tbody tr");
+let saved = localStorage.getItem("check"+index)
 
-    linhas.forEach((linha, index) => {
-        const checks = linha.querySelectorAll("input[type='checkbox']");
-        let feitos = 0;
+if(saved==="true"){
 
-        checks.forEach(check => {
-            if (check.checked) feitos++;
-        });
+box.checked=true
 
-        desempenho.push(feitos);
-    });
-
-    const ctx = document.getElementById("performanceChart");
-
-    new Chart(ctx, {
-        type: "bar",
-        data: {
-            labels: dias,
-            datasets: [{
-                label: "Tarefas concluídas",
-                data: desempenho
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
 }
 
-atualizarGrafico();
-document.querySelectorAll("input[type='checkbox']").forEach(check => {
-    check.addEventListener("change", () => {
-        location.reload();
-    });
-});
+box.addEventListener("change",()=>{
+
+localStorage.setItem("check"+index,box.checked)
+
+atualizarDashboard()
+
+})
+
+})
+
+function atualizarDashboard(){
+
+let total = checkboxes.length
+
+let feitos = 0
+
+checkboxes.forEach(box=>{
+
+if(box.checked) feitos++
+
+})
+
+let porcentagem = Math.round((feitos/total)*100)
+
+document.getElementById("score").innerText =
+"Produtividade da semana: "+porcentagem+"%"
+
+criarGrafico()
+
+}
+
+function criarGrafico(){
+
+const dias = ["Seg","Ter","Qua","Qui","Sex","Sab","Dom"]
+
+let dados = [0,0,0,0,0,0,0]
+
+let linhas = document.querySelectorAll("tbody tr")
+
+linhas.forEach(linha=>{
+
+let checks = linha.querySelectorAll("input")
+
+checks.forEach((check,index)=>{
+
+if(check.checked){
+
+dados[index]++
+
+}
+
+})
+
+})
+
+const ctx = document.getElementById("grafico")
+
+if(window.grafico){
+
+window.grafico.destroy()
+
+}
+
+window.grafico = new Chart(ctx,{
+
+type:"bar",
+
+data:{
+
+labels:dias,
+
+datasets:[{
+
+label:"Hábitos concluídos",
+
+data:dados
+
+}]
+
+}
+
+})
+
+}
+
+atualizarDashboard()
