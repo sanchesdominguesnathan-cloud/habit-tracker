@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Habit Tracker</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<h1>Controle de Tarefas da Semana</h1>
+
+<input type="text" id="novaTarefa" placeholder="Digite uma tarefa">
+<button onclick="adicionarTarefa()">Adicionar</button>
+
+<table id="tabela">
+
+<tr>
+<th>Tarefa</th>
+<th>Seg</th>
+<th>Ter</th>
+<th>Qua</th>
+<th>Qui</th>
+<th>Sex</th>
+<th>Sab</th>
+<th>Dom</th>
+</tr>
+
+</table>
+
+<div id="dashboard">
+
+<h2>Dashboard</h2>
+
+<div id="resultado"></div>
+
+</div>
+
+<script>
+
+function adicionarTarefa(){
+
+let nome = document.getElementById("novaTarefa").value
+
+if(nome === "") return
+
+let tabela = document.getElementById("tabela")
+
+let linha = tabela.insertRow()
+
+let colunaNome = linha.insertCell(0)
+
+colunaNome.innerHTML = nome
+
+for(let i=1;i<=7;i++){
+
+let coluna = linha.insertCell(i)
+
+let checkbox = document.createElement("input")
+
+checkbox.type="checkbox"
+
+checkbox.onchange = atualizarDashboard
+
+coluna.appendChild(checkbox)
+
+}
+
+document.getElementById("novaTarefa").value=""
+
+atualizarDashboard()
+
+}
+
+function atualizarDashboard(){
+
+let tabela = document.getElementById("tabela")
+
+let linhas = tabela.rows
+
+let resultado = document.getElementById("resultado")
+
+resultado.innerHTML=""
+
+for(let i=1;i<linhas.length;i++){
+
+let linha = linhas[i]
+
+let tarefa = linha.cells[0].innerText
+
+let total=0
+let feitos=0
+
+for(let j=1;j<=7;j++){
+
+let checkbox = linha.cells[j].querySelector("input")
+
+total++
+
+if(checkbox.checked){
+
+feitos++
+
+}
+
+}
+
+let porcentagem = Math.round((feitos/total)*100)
+
+resultado.innerHTML += tarefa + " : " + porcentagem + "%<br>"
+
+}
+
+}
+
+</script>
+
+</body>
+
+</html>
