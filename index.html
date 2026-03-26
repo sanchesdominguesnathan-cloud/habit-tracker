@@ -1,25 +1,26 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="pt">
 <head>
-
+<meta charset="UTF-8">
 <title>Habit Tracker</title>
 
 <link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
 
 <body>
 
-<h1>Controle de Tarefas da Semana</h1>
+<div class="container">
 
-<input type="text" id="novaTarefa" placeholder="Digite uma tarefa">
-<button onclick="adicionarTarefa()">Adicionar</button>
+<h1>📅 Habit Tracker</h1>
 
-<table id="tabela">
+<table id="habitTable">
 
+<thead>
 <tr>
-<th>Tarefa</th>
+<th>Hábito</th>
 <th>Seg</th>
 <th>Ter</th>
 <th>Qua</th>
@@ -28,96 +29,60 @@
 <th>Sab</th>
 <th>Dom</th>
 </tr>
+</thead>
+
+<tbody>
+
+<tr>
+<td>Treinar</td>
+<td><input type="checkbox"></td>
+<td><input type="checkbox"></td>
+<td><input type="checkbox"></td>
+<td><input type="checkbox"></td>
+<td><input type="checkbox"></td>
+<td><input type="checkbox"></td>
+<td><input type="checkbox"></td>
+</tr>
+
+<tr>
+<td>Ler</td>
+<td><input type="checkbox"></td>
+<td><input type="checkbox"></td>
+<td><input type="checkbox"></td>
+<td><input type="checkbox"></td>
+<td><input type="checkbox"></td>
+<td><input type="checkbox"></td>
+<td><input type="checkbox"></td>
+</tr>
+
+<tr>
+<td>Estudar</td>
+<td><input type="checkbox"></td>
+<td><input type="checkbox"></td>
+<td><input type="checkbox"></td>
+<td><input type="checkbox"></td>
+<td><input type="checkbox"></td>
+<td><input type="checkbox"></td>
+<td><input type="checkbox"></td>
+</tr>
+
+</tbody>
 
 </table>
 
-<div id="dashboard">
+<div class="dashboard">
 
-<h2>Dashboard</h2>
+<h2>Desempenho</h2>
 
-<div id="resultado"></div>
+<p id="score"></p>
+
+<canvas id="grafico"></canvas>
 
 </div>
 
-<script>
+</div>
 
-function adicionarTarefa(){
-
-let nome = document.getElementById("novaTarefa").value
-
-if(nome === "") return
-
-let tabela = document.getElementById("tabela")
-
-let linha = tabela.insertRow()
-
-let colunaNome = linha.insertCell(0)
-
-colunaNome.innerHTML = nome
-
-for(let i=1;i<=7;i++){
-
-let coluna = linha.insertCell(i)
-
-let checkbox = document.createElement("input")
-
-checkbox.type="checkbox"
-
-checkbox.onchange = atualizarDashboard
-
-coluna.appendChild(checkbox)
-
-}
-
-document.getElementById("novaTarefa").value=""
-
-atualizarDashboard()
-
-}
-
-function atualizarDashboard(){
-
-let tabela = document.getElementById("tabela")
-
-let linhas = tabela.rows
-
-let resultado = document.getElementById("resultado")
-
-resultado.innerHTML=""
-
-for(let i=1;i<linhas.length;i++){
-
-let linha = linhas[i]
-
-let tarefa = linha.cells[0].innerText
-
-let total=0
-let feitos=0
-
-for(let j=1;j<=7;j++){
-
-let checkbox = linha.cells[j].querySelector("input")
-
-total++
-
-if(checkbox.checked){
-
-feitos++
-
-}
-
-}
-
-let porcentagem = Math.round((feitos/total)*100)
-
-resultado.innerHTML += tarefa + " : " + porcentagem + "%<br>"
-
-}
-
-}
-
-</script>
+<script src="dashboard.js"></script>
 
 </body>
-
 </html>
